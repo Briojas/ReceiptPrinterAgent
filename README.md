@@ -12,17 +12,58 @@ A Python-based task management system that prints tasks to a thermal receipt pri
 
 ## Installation
 
+**⚠️ Linux Required:** This project requires a Linux environment due to native dependencies (`libsql-experimental`). Windows users should use WSL.
+
+### Automated Setup (Recommended)
+
 ```bash
 # Clone the repository
 git clone https://github.com/CodingWithLewis/ReceiptPrinterAgent
-cd receipt-printer-tasks
+cd ReceiptPrinterAgent
 
-# Install dependencies
-pip install -r requirements.txt
+# Run setup script (works on Debian, Ubuntu, Fedora, Arch, WSL)
+chmod +x setup_linux.sh
+./setup_linux.sh
 
 # Set up environment variables
 cp .env.example .env
 # Edit .env with your API keys
+```
+
+### Manual Setup
+
+```bash
+# Install Python 3, pip, and build tools
+# For Debian/Ubuntu:
+sudo apt install python3 python3-pip python3-venv build-essential pkg-config libssl-dev
+
+# Install Rust (required for libsql-experimental)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### Windows Users
+
+Use **WSL (Windows Subsystem for Linux)** for full compatibility:
+
+```powershell
+# Install WSL
+wsl --install
+
+# Open WSL terminal, navigate to project
+cd /mnt/c/projects/ReceiptPrinterAgent
+
+# Run the setup script
+chmod +x setup_linux.sh
+./setup_linux.sh
 ```
 
 ## Configuration

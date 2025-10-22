@@ -5,7 +5,14 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, List, Optional
 
-import libsql_experimental as libsql
+try:
+    import libsql_experimental as libsql
+    LIBSQL_AVAILABLE = True
+except ImportError:
+    LIBSQL_AVAILABLE = False
+    print("⚠️  Warning: libsql-experimental not installed. Database features disabled.")
+    print("   Install it separately or run in WSL for full functionality.")
+
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -33,6 +40,16 @@ class TaskDatabase:
 
     def __init__(self, db_url: Optional[str] = None, auth_token: Optional[str] = None):
         """Initialize database connection."""
+        if not LIBSQL_AVAILABLE:
+            raise ImportError(
+                "libsql-experimental is required for database features.\n"
+                "Due to Windows build issues, you have these options:\n"
+                "1. Use WSL (Windows Subsystem for Linux) and install there\n"
+                "2. Use Docker to run the application\n"
+                "3. Deploy to a Linux server/cloud environment\n"
+                "4. Try manual installation: pip install libsql-experimental"
+            )
+        
         self.db_url = db_url or os.getenv("TURSO_DATABASE_URL")
         self.auth_token = auth_token or os.getenv("TURSO_AUTH_TOKEN")
         self.openai = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
